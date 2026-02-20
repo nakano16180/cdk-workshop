@@ -1,17 +1,30 @@
-// import * as cdk from 'aws-cdk-lib';
-// import { Template } from 'aws-cdk-lib/assertions';
-// import * as CdkWorkshop from '../lib/cdk-workshop-stack';
+import * as cdk from 'aws-cdk-lib';
+import { Match, Template } from 'aws-cdk-lib/assertions';
+import { CdkWorkshopStack } from '../lib/cdk-workshop-stack';
 
-// example test. To run these tests, uncomment this file along with the
-// example resource in lib/cdk-workshop-stack.ts
-test('SQS Queue Created', () => {
-//   const app = new cdk.App();
-//     // WHEN
-//   const stack = new CdkWorkshop.CdkWorkshopStack(app, 'MyTestStack');
-//     // THEN
-//   const template = Template.fromStack(stack);
+test('EventBridge rule is created with scheduled expression', () => {
+  const app = new cdk.App();
+  const stack = new CdkWorkshopStack(app, 'MyTestStack');
+  const template = Template.fromStack(stack);
 
-//   template.hasResourceProperties('AWS::SQS::Queue', {
-//     VisibilityTimeout: 300
-//   });
+  template.hasResourceProperties('AWS::Events::Rule', {
+    ScheduleExpression: 'rate(5 minutes)',
+    State: 'ENABLED',
+    Targets: Match.arrayWith([
+      Match.objectLike({
+        Arn: Match.anyValue(),
+      }),
+    ]),
+  });
+});
+
+test('EventBridge target Lambda function is created', () => {
+  const app = new cdk.App();
+  const stack = new CdkWorkshopStack(app, 'MyTestStack');
+  const template = Template.fromStack(stack);
+
+  template.hasResourceProperties('AWS::Lambda::Function', {
+    Handler: 'eventbridge.handler',
+    Runtime: 'nodejs14.x',
+  });
 });

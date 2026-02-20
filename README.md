@@ -1,8 +1,14 @@
-# Welcome to your CDK TypeScript project
+# CDK Workshop サンプル
 
-This is a blank project for CDK development with TypeScript.
+このリポジトリには、以下 2 つのサンプルが含まれています。
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+- API Gateway → Lambda（`HitCounter` 付き）
+- EventBridge（スケジュール）→ Lambda
+
+## EventBridge サンプルの概要
+
+`lib/cdk-workshop-stack.ts` では、5 分ごとに起動する EventBridge ルール
+`EventBridgeSampleRule` を定義し、`lambda/eventbridge.js` の Lambda をターゲットにしています。
 
 ## Useful commands
 
