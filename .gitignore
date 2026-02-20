@@ -1,3 +1,5 @@
+volume/*
+
 *.js
 !jest.config.js
 *.d.ts
